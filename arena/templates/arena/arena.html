@@ -1,0 +1,142 @@
+{% extends 'arena/base.html' %}
+{% load static %}
+
+{% block title %}Arena | ClashForge{% endblock %}
+{% block shell_title %}Arena{% endblock %}
+{% block shell_copy %}Choose two fighters, start the match, and see who comes out on top.{% endblock %}
+
+{% block extra_styles %}
+  <link rel="stylesheet" href="{% static 'arena/css/pages/arena.css' %}" />
+{% endblock %}
+
+{% block header_actions %}
+  <a href="{% url 'roster-page' %}" class="button-link button--secondary">Open Roster</a>
+  <a href="{% url 'fighters-page' %}" class="button-link button--ghost">Browse Fighters</a>
+{% endblock %}
+
+{% block content %}
+  <section id="champion-banner" class="arena-banner-region"></section>
+  <section id="challenge-banner" class="arena-banner-region"></section>
+  <section id="forge-status" class="arena-banner-region"></section>
+
+  <section class="split-layout split-layout--sidebar arena-layout">
+    <aside class="panel arena-sidebar">
+      <header class="section-header">
+        <div>
+          <p class="section-header__eyebrow">MATCHUP SETUP</p>
+          <h2 class="section-header__title">Choose your fighters</h2>
+          <p class="section-header__copy">Search the roster and assign fighters to the left and right side of the arena.</p>
+        </div>
+      </header>
+
+      <div class="form-field">
+        <label for="character-search" class="form-field__label">Search fighters</label>
+        <input id="character-search" type="text" class="input" placeholder="Search by name, title, archetype, or role" />
+      </div>
+
+      <div class="support-note">
+        The full browse flow lives on the Fighters page. This list is here only for matchup setup and quick roster actions.
+      </div>
+
+      <div id="character-list" class="arena-character-list"></div>
+    </aside>
+
+    <section class="panel arena-stage">
+      <header class="section-header arena-stage__header">
+        <div>
+          <p class="section-header__eyebrow">Battle Stage</p>
+          <h2 class="section-header__title">Set up the fight</h2>
+          <p class="section-header__copy">Lock in both fighters, choose the number of simulations, and start the match.</p>
+        </div>
+        <div class="action-row">
+          <label class="form-field arena-stage__batch-field">
+            <span class="form-field__label">NUMBER OF FIGHTS</span>
+            <select id="batch-count" class="select">
+              <option value="1">1 Fight</option>
+              <option value="10">10 Fights</option>
+              <option value="100">100 Fights</option>
+              <option value="1000">1000 Fights</option>
+            </select>
+          </label>
+          <button id="refresh-data" class="button button--ghost" type="button">Reset</button>
+          <button id="simulate-btn" class="button button--primary" type="button">Start Fight</button>
+        </div>
+      </header>
+
+      <div class="arena-stage__grid">
+        <div class="arena-stage__main">
+          <section class="arena-matchup-summary">
+            <article class="arena-matchup-card arena-matchup-card--a">
+              <p class="arena-matchup-card__label">Fighter A</p>
+              <p id="selected-a" class="arena-matchup-card__name">Raze</p>
+              <p id="selected-a-meta" class="arena-matchup-card__meta">Waiting on roster sync</p>
+            </article>
+            <article class="arena-matchup-card arena-matchup-card--b">
+              <p class="arena-matchup-card__label">Fighter B</p>
+              <p id="selected-b" class="arena-matchup-card__name">Titan</p>
+              <p id="selected-b-meta" class="arena-matchup-card__meta">Waiting on roster sync</p>
+            </article>
+          </section>
+
+          <section id="arena-shell" class="arena-shell-frame">
+            <canvas id="arena-canvas"></canvas>
+
+            <div class="arena-hud">
+              <div class="arena-hud__panel arena-hud__panel--a">
+                <div class="arena-hud__top">
+                  <span id="hud-name-a">Raze</span>
+                  <span id="hud-hp-a">100%</span>
+                </div>
+                <div class="arena-hud__bar">
+                  <div id="hud-bar-a" class="arena-hud__fill arena-hud__fill--a" style="width:100%"></div>
+                </div>
+                <p id="hud-cd-a" class="arena-hud__meta">Cooldowns: Ready</p>
+              </div>
+
+              <div class="arena-hud__panel arena-hud__panel--b">
+                <div class="arena-hud__top">
+                  <span id="hud-name-b">Titan</span>
+                  <span id="hud-hp-b">100%</span>
+                </div>
+                <div class="arena-hud__bar">
+                  <div id="hud-bar-b" class="arena-hud__fill arena-hud__fill--b" style="width:100%"></div>
+                </div>
+                <p id="hud-cd-b" class="arena-hud__meta">Cooldowns: Ready</p>
+              </div>
+            </div>
+
+            <div id="commentary-pop" class="arena-commentary">Fight commentary appears here</div>
+          </section>
+        </div>
+
+        <aside class="arena-stage__support">
+          <section class="surface-card arena-support-card">
+            <header class="section-header">
+              <div>
+                <p class="section-header__eyebrow">Results</p>
+                <h3 class="section-header__title">Official summary</h3>
+              </div>
+            </header>
+            <div id="result-box" class="arena-result-box">Choose two saved fighters and throw them into the blender.</div>
+          </section>
+
+          <section class="surface-card arena-support-card">
+            <header class="section-header">
+              <div>
+                <p class="section-header__eyebrow">Live Commentary</p>
+                <h3 class="section-header__title">Round log</h3>
+              </div>
+            </header>
+            <div id="fight-log" class="arena-support-list arena-support-list--scroll"></div>
+          </section>
+        </aside>
+      </div>
+    </section>
+  </section>
+{% endblock %}
+
+{% block extra_scripts %}
+  <script nonce="{{ request.csp_nonce }}" src="https://cdn.jsdelivr.net/npm/pixi.js@8.18.1/dist/pixi.min.js"></script>
+  <script nonce="{{ request.csp_nonce }}" src="https://cdn.jsdelivr.net/npm/pixi.js@8.18.1/dist/packages/unsafe-eval.min.js"></script>
+  <script nonce="{{ request.csp_nonce }}" type="module" src="{% static 'arena/js/app.js' %}"></script>
+{% endblock %}

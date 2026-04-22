@@ -1,0 +1,139 @@
+{% extends 'arena/base.html' %}
+{% load static %}
+
+{% block title %}Roster | ClashForge{% endblock %}
+{% block shell_title %}Browser-local roster{% endblock %}
+{% block shell_copy %}Keep your own local team close at hand for quick Arena runs, Forge follow-up, and lightweight imports without account overhead.{% endblock %}
+
+{% block extra_styles %}
+  <link rel="stylesheet" href="{% static 'arena/css/roster.css' %}" />
+{% endblock %}
+
+{% block page_header %}
+  <header class="roster-hero">
+    <div class="roster-hero__body">
+      <p class="roster-hero__eyebrow">ClashForge</p>
+      <h1 class="roster-hero__title">Local Roster</h1>
+      <p class="roster-hero__copy">Build your team, choose your champion, and keep your best fighters ready for the arena.</p>
+    </div>
+    <div class="roster-actions">
+      <a href="{% url 'arena-index' %}" class="roster-action roster-action--arena">Open Arena</a>
+      <a href="{% url 'forge-page' %}" class="roster-action roster-action--forge">Open Forge</a>
+    </div>
+  </header>
+{% endblock %}
+
+{% block content %}
+  <section class="roster-page">
+    <section id="roster-page-status" class="roster-status-region" aria-live="polite"></section>
+
+    <section class="roster-layout">
+      <div class="roster-main">
+        <section class="roster-panel roster-panel--primary" aria-labelledby="your-roster-title">
+          <header class="roster-section-head">
+            <div>
+              <p class="roster-section-kicker">Your Roster</p>
+              <h2 id="your-roster-title" class="roster-section-title">Stored in your browser</h2>
+              <p class="roster-section-copy">Your saved fighters come first here. Use this page as a clean staging area for Arena and Forge.</p>
+            </div>
+          </header>
+
+          <div class="roster-summary" aria-label="Roster summary">
+            <div class="roster-summary-pill roster-summary-pill--total">
+              <span class="roster-summary-label">Total</span>
+              <strong id="roster-total-count" class="roster-summary-value">0</strong>
+            </div>
+            <div class="roster-summary-pill roster-summary-pill--imports">
+              <span class="roster-summary-label">Imports</span>
+              <strong id="roster-import-count" class="roster-summary-value">0</strong>
+            </div>
+            <div class="roster-summary-pill roster-summary-pill--forge">
+              <span class="roster-summary-label">Forge saves</span>
+              <strong id="roster-saved-count" class="roster-summary-value">0</strong>
+            </div>
+            <div class="roster-summary-pill roster-summary-pill--variants">
+              <span class="roster-summary-label">Variants</span>
+              <strong id="roster-variant-count" class="roster-summary-value">0</strong>
+            </div>
+          </div>
+
+          <p id="roster-empty-copy" class="roster-empty-copy">Add fighters from Arena, Forge, or a share page to start building your local pool.</p>
+
+          <div id="local-roster-grid" class="roster-grid"></div>
+        </section>
+      </div>
+
+      <aside class="roster-sidebar">
+        <section id="roster-champion-card" class="roster-panel roster-panel--champion" aria-labelledby="roster-champion-title">
+          <header class="roster-sidebar-head">
+            <p class="roster-section-kicker roster-section-kicker--champion">Champion</p>
+            <h2 id="roster-champion-title" class="roster-sidebar-title">Current headliner</h2>
+          </header>
+          <div id="roster-champion-body" class="roster-champion-body">
+            Pick one roster fighter as your current champion for this browser.
+          </div>
+        </section>
+
+        <p class="roster-muted-note">
+          Local roster entries live only in this browser. Imports stay playable here.
+        </p>
+      </aside>
+    </section>
+
+    <section class="roster-panel public-fighters" aria-labelledby="public-fighters-title">
+      <header class="roster-section-head roster-section-head--library">
+        <div>
+          <p class="roster-section-kicker">Public Imports</p>
+          <h2 id="public-fighters-title" class="roster-section-title">Library picks to add later</h2>
+          <p class="roster-section-copy">Useful imports stay available below, but they should feel secondary to the team you already keep locally.</p>
+        </div>
+        <div class="roster-actions">
+          <span class="public-fighters-count">{{ featured_fighters|length }} shown</span>
+          <a href="{% url 'fighters-page' %}" class="roster-action">Open full library</a>
+        </div>
+      </header>
+
+      <div class="fighter-library">
+        {% for fighter in featured_fighters %}
+          <article class="fighter-card">
+            <div class="fighter-card__identity">
+              <div class="fighter-card__avatar" style="background: {{ fighter.avatar_color }};"></div>
+              <div class="fighter-card__body">
+                <div class="fighter-card__heading">
+                  <div>
+                    <p class="fighter-card__name">{{ fighter.name }}</p>
+                    <p class="fighter-card__title">{{ fighter.title|default:"Untitled combatant" }}</p>
+                  </div>
+                  <span class="fighter-card__archetype">{{ fighter.get_archetype_display }}</span>
+                </div>
+                {% if fighter.creator_name %}
+                  <p class="fighter-card__creator">Forged by {{ fighter.creator_name }}</p>
+                {% endif %}
+                <p class="fighter-card__description">{{ fighter.description|default:"No lore written yet."|truncatechars:120 }}</p>
+              </div>
+            </div>
+            <div class="fighter-card__actions">
+              <button type="button" class="fighter-card__action fighter-card__action--primary featured-roster-add" data-fighter-id="{{ fighter.id }}">
+                Add to roster
+              </button>
+              <a href="{% url 'fighter-detail' fighter.slug %}" class="fighter-card__action fighter-card__action--secondary">
+                View profile
+              </a>
+              <a href="{% url 'arena-index' %}?challenge={{ fighter.slug }}" class="fighter-card__action fighter-card__action--accent">
+                Challenge
+              </a>
+            </div>
+          </article>
+        {% empty %}
+          <div class="fighter-library-empty">
+            No public fighters are available yet.
+          </div>
+        {% endfor %}
+      </div>
+    </section>
+  </section>
+{% endblock %}
+
+{% block extra_scripts %}
+  <script nonce="{{ request.csp_nonce }}" type="module" src="{% static 'arena/js/roster.js' %}"></script>
+{% endblock %}

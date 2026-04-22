@@ -1,0 +1,29 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Server Error | ClashForge</title>
+  <link rel="stylesheet" href="{% static 'arena/css/base.css' %}" />
+  <link rel="stylesheet" href="{% static 'arena/css/components.css' %}" />
+  <link rel="stylesheet" href="{% static 'arena/css/pages/error.css' %}" />
+  <meta name="robots" content="noindex,nofollow">
+</head>
+<body>
+  <main class="error-shell">
+    <section class="error-panel" aria-labelledby="error-title">
+      <p class="error-panel__eyebrow">500</p>
+      <h1 id="error-title">Something went wrong</h1>
+      <p class="error-panel__copy">
+        ClashForge hit a server issue while loading this page. No technical details are shown here, but a report can help track it down.
+      </p>
+
+      <div class="error-panel__actions">
+        <a class="button-link button--primary" href="{% url 'home-page' %}">Return home</a>
+        <a class="button-link button--ghost" href="{% url 'bug-report-page' %}">Report a bug</a>
+      </div>
+    </section>
+  </main>
+</body>
+</html>

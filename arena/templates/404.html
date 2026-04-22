@@ -1,0 +1,28 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Page Not Found | ClashForge</title>
+  <link rel="stylesheet" href="{% static 'arena/css/base.css' %}" />
+  <link rel="stylesheet" href="{% static 'arena/css/components.css' %}" />
+  <link rel="stylesheet" href="{% static 'arena/css/pages/error.css' %}" />
+  <meta name="robots" content="noindex,nofollow">
+</head>
+<body>
+  <main class="error-shell">
+    <section class="error-panel" aria-labelledby="error-title">
+      <p class="error-panel__eyebrow">404</p>
+      <h1 id="error-title">Page not found</h1>
+      <p class="error-panel__copy">
+        The page you tried to open does not exist or may have moved. Head back to ClashForge and keep building from there.
+      </p>
+
+      <div class="error-panel__actions">
+        <a class="button-link button--primary" href="{% url 'home-page' %}">Return home</a>
+      </div>
+    </section>
+  </main>
+</body>
+</html>

@@ -1,0 +1,176 @@
+.fighter-detail {
+  display: grid;
+  gap: 1rem;
+}
+
+.fighter-hero__top {
+  display: flex;
+  gap: 1rem;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.fighter-hero__identity {
+  display: flex;
+  gap: 1rem;
+  min-width: 0;
+}
+
+.fighter-hero__avatar {
+  width: 4.4rem;
+  height: 4.4rem;
+  border-radius: 1.3rem;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 0 0 22px rgba(56, 189, 248, 0.16);
+  flex-shrink: 0;
+}
+
+.fighter-hero__body,
+.fighter-detail__main,
+.fighter-detail__sidebar {
+  min-width: 0;
+}
+
+.fighter-hero__eyebrow-row,
+.fighter-hero__tags,
+.fighter-hero__actions,
+.fighter-detail__ability-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+}
+
+.fighter-hero__name,
+.fighter-hero__title,
+.fighter-hero__creator,
+.fighter-hero__summary {
+  margin: 0;
+}
+
+.fighter-hero__name {
+  font-size: clamp(1.7rem, 3vw, 2.3rem);
+  letter-spacing: -0.03em;
+}
+
+.fighter-hero__title {
+  margin-top: 0.25rem;
+  color: var(--text-soft);
+  font-size: 1rem;
+}
+
+.fighter-hero__creator {
+  margin-top: 0.35rem;
+  color: var(--blue);
+  font-size: 0.78rem;
+}
+
+.fighter-hero__tags {
+  margin-top: 0.75rem;
+}
+
+.fighter-hero__summary,
+.fighter-detail__copy,
+.fighter-detail__prose {
+  color: var(--text-soft);
+}
+
+.fighter-detail__list {
+  margin: 0;
+  padding-left: 1rem;
+  color: var(--text-soft);
+}
+
+.fighter-hero__summary {
+  margin-top: 0.7rem;
+}
+
+.fighter-hero__actions {
+  justify-content: flex-end;
+}
+
+.fighter-plan-grid,
+.fighter-stats-grid {
+  display: grid;
+  gap: 0.8rem;
+}
+
+.fighter-plan-grid__accent--pink {
+  border-color: rgba(255, 77, 109, 0.24);
+}
+
+.fighter-plan-grid__accent--good {
+  border-color: rgba(52, 211, 153, 0.24);
+}
+
+.fighter-plan-grid__accent--warn {
+  border-color: rgba(251, 191, 36, 0.24);
+}
+
+.fighter-detail__prose {
+  margin: 0;
+  line-height: 1.75;
+}
+
+.fighter-ability-list {
+  display: grid;
+  gap: 0.8rem;
+  margin-top: 0.9rem;
+}
+
+.fighter-detail__ability-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.8rem;
+  align-items: flex-start;
+}
+
+.fighter-detail__ability-title {
+  margin: 0;
+  color: #fff;
+  font-weight: 700;
+}
+
+.fighter-detail__champion-copy {
+  color: var(--text-soft);
+}
+
+.fighter-detail__break {
+  word-break: break-word;
+}
+
+.fighter-stats-grid article {
+  display: grid;
+  gap: 0.25rem;
+}
+
+.fighter-stat__value {
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: #fff;
+}
+
+.fighter-stats-grid__wide {
+  grid-column: 1 / -1;
+}
+
+@media (min-width: 840px) {
+  .fighter-plan-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .fighter-stats-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 920px) {
+  .fighter-hero__top,
+  .fighter-hero__identity,
+  .fighter-detail__ability-head {
+    flex-direction: column;
+  }
+
+  .fighter-hero__actions {
+    justify-content: flex-start;
+  }
+}

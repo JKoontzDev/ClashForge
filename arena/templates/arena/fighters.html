@@ -1,0 +1,71 @@
+{% extends 'arena/base.html' %}
+{% load static %}
+
+{% block title %}Fighters | ClashForge{% endblock %}
+{% block shell_title %}Public Fighters{% endblock %}
+{% block shell_copy %}Browse fighters created by other players, add them to your roster, or challenge them in the arena.{% endblock %}
+
+{% block extra_styles %}
+  <link rel="stylesheet" href="{% static 'arena/css/pages/fighters.css' %}" />
+{% endblock %}
+
+{% block header_actions %}
+  <a href="{% url 'roster-page' %}" class="button-link button--secondary">Open Roster</a>
+  <a href="{% url 'reports-page' %}" class="button-link button--ghost">Open Reports</a>
+{% endblock %}
+
+{% block content %}
+  <section id="fighters-page-status" class="fighters-status-region" aria-live="polite"></section>
+
+  <section class="panel">
+    <header class="section-header">
+      <div>
+        <p class="section-header__eyebrow">Public Fighters</p>
+        <h2 class="section-header__title">Fighters you can add or challenge</h2>
+        <p class="section-header__copy">Find new fighters, view their details, add them to your roster, or take them straight into a match.</p>
+      </div>
+      <div class="stat-pill-row">
+        <div class="stat-pill">
+          <span class="stat-pill__label">Fighters Made</span>
+          <span class="stat-pill__value">{{ fighters|length }}</span>
+        </div>
+      </div>
+    </header>
+
+    <div class="fighters-grid">
+      {% for fighter in fighters %}
+        <article class="fighter-directory-card">
+          <div class="fighter-directory-card__top">
+            <div class="fighter-directory-card__avatar" style="background: {{ fighter.avatar_color }};"></div>
+            <div class="fighter-directory-card__body">
+              <div class="fighter-directory-card__head">
+                <div>
+                  <p class="fighter-directory-card__name">{{ fighter.name }}</p>
+                  <p class="fighter-directory-card__title">{{ fighter.title|default:"Untitled combatant" }}</p>
+                </div>
+                <span class="meta-pill meta-pill--purple">{{ fighter.get_archetype_display }}</span>
+              </div>
+              {% if fighter.creator_name %}
+                <p class="fighter-directory-card__creator">Forged by {{ fighter.creator_name }}</p>
+              {% endif %}
+              <p class="fighter-directory-card__description">{{ fighter.description|default:"No lore written yet."|truncatechars:150 }}</p>
+            </div>
+          </div>
+
+          <div class="fighter-directory-card__actions">
+            <button type="button" class="button fighters-roster-add" data-fighter-id="{{ fighter.id }}">Add to Roster</button>
+            <a href="{% url 'fighter-detail' fighter.slug %}" class="button-link button--secondary">View Fighter</a>
+            <a href="{% url 'arena-index' %}?challenge={{ fighter.slug }}" class="button-link button--primary">Challenge</a>
+            <a href="{% url 'forge-page' %}?forge={{ fighter.slug }}" class="button-link button--ghost">Open in Forge</a>
+          </div>
+        </article>
+      {% empty %}
+        <div class="empty-state">No public fighters are available yet.</div>
+      {% endfor %}
+    </div>
+  </section>
+{% endblock %}
+
+{% block extra_scripts %}
+  <script nonce="{{ request.csp_nonce }}" type="module" src="{% static 'arena/js/fighters.js' %}"></script>
+{% endblock %}

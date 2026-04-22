@@ -1,0 +1,194 @@
+{% extends 'arena/base.html' %}
+{% load static %}
+
+{% block title %}Forge | ClashForge{% endblock %}
+{% block shell_title %}Forge{% endblock %}
+{% block shell_copy %}Create a fighter, shape their style, and prepare them for the arena.{% endblock %}
+
+{% block extra_styles %}
+  <link rel="stylesheet" href="{% static 'arena/css/pages/forge.css' %}" />
+{% endblock %}
+
+{% block header_actions %}
+  <a href="{% url 'fighters-page' %}" class="button-link button--ghost">Browse Fighters</a>
+  <a href="{% url 'arena-index' %}" class="button-link button--primary">Open Arena</a>
+{% endblock %}
+
+{% block content %}
+  <section id="challenge-banner" class="forge-banner-region"></section>
+  <section id="forge-status" class="forge-banner-region"></section>
+
+  <section class="split-layout split-layout--sidebar forge-layout">
+    <aside class="panel forge-library">
+      <header class="section-header">
+        <div>
+          <p class="section-header__eyebrow">Load A Fighter</p>
+          <h2 class="section-header__title">Open and edit a saved fighter</h2>
+          <p class="section-header__copy">Choose a saved fighter to view it, tweak it, or use it as the base for a new build.</p>
+        </div>
+      </header>
+
+      <div class="form-field">
+        <label for="character-search" class="form-field__label">Search fighters</label>
+        <input id="character-search" type="text" class="input" placeholder="Search by name, archetype, title, or description" />
+      </div>
+
+      <div class="support-note">
+        Pick a fighter from your library to continue editing or start from one as a template.
+      </div>
+
+      <div id="character-list" class="forge-library__list"></div>
+    </aside>
+
+    <section class="forge-main">
+      <div class="panel forge-workflow">
+        <header class="section-header">
+          <div>
+            <p class="section-header__eyebrow">FIGHTER CREATION</p>
+            <h2 class="section-header__title">Create or shape a fighter</h2>
+            <p class="section-header__copy">Choose a fighting style, define the build, and refine the fighter until it feels right.</p>
+          </div>
+          <div class="stat-pill-row">
+            <div class="stat-pill">
+              <span class="stat-pill__label">Saved Fighters</span>
+              <span id="stat-character-count" class="stat-pill__value">0</span>
+            </div>
+            <div class="stat-pill">
+              <span class="stat-pill__label">Recent Battles</span>
+              <span id="stat-fight-count" class="stat-pill__value">0</span>
+            </div>
+          </div>
+        </header>
+
+        <form id="forge-form" class="forge-form">
+          <section class="surface-card forge-step">
+            <header class="section-header">
+              <div>
+                <p class="section-header__eyebrow">Step 1</p>
+                <h3 class="section-header__title">Choose a fighting style</h3>
+                <p class="section-header__copy">Start with the core style of the fighter, then build their strengths around it.</p>
+              </div>
+              <span id="selected-archetype-label" class="meta-pill meta-pill--purple">Duelist</span>
+            </header>
+
+            <div id="archetype-picker" class="forge-archetype-grid">
+              <button type="button" class="forge-archetype-option is-active" data-archetype="duelist">Duelist</button>
+              <button type="button" class="forge-archetype-option" data-archetype="assassin">Assassin</button>
+              <button type="button" class="forge-archetype-option" data-archetype="tank">Tank</button>
+              <button type="button" class="forge-archetype-option" data-archetype="bruiser">Bruiser</button>
+              <button type="button" class="forge-archetype-option" data-archetype="control">Control</button>
+              <button type="button" class="forge-archetype-option" data-archetype="glass_cannon">Glass Cannon</button>
+            </div>
+
+            <div class="forge-archetype-brief">
+              <div class="section-header">
+                <div>
+                  <p class="section-header__eyebrow">Style Overview</p>
+                  <h3 id="archetype-summary-title" class="section-header__title">Duelist</h3>
+                  <p id="archetype-summary" class="section-header__copy">Flexible, honest tempo with clean punish windows.</p>
+                </div>
+                <div id="archetype-role-tags" class="action-row"></div>
+              </div>
+
+              <div class="forge-archetype-columns">
+                <section class="surface-card forge-archetype-note forge-archetype-note--good">
+                  <p class="section-header__eyebrow">Strengths</p>
+                  <ul id="archetype-strengths" class="forge-note-list"></ul>
+                </section>
+                <section class="surface-card forge-archetype-note forge-archetype-note--warn">
+                  <p class="section-header__eyebrow">Weaknesses</p>
+                  <ul id="archetype-weaknesses" class="forge-note-list"></ul>
+                </section>
+              </div>
+
+              <div class="support-note">
+                <p><strong>Win pattern:</strong> <span id="archetype-win-pattern">Trade evenly, make the cleaner read, and turn one timing edge into control of the round.</span></p>
+                <p><strong>Matchup read:</strong> <span id="archetype-matchup-read">Use duelists as a fair midline reference when you do not want an extreme stress test.</span></p>
+              </div>
+            </div>
+          </section>
+
+          <section class="surface-card forge-step">
+            <header class="section-header">
+              <div>
+                <p class="section-header__eyebrow">Step 2</p>
+                <h3 class="section-header__title">Add prompt context</h3>
+                <p class="section-header__copy">Describe the fantasy, combat hook, or weakness. The style type still defines the gameplay backbone.</p>
+              </div>
+            </header>
+
+            <div class="forge-form-grid">
+              <label class="form-field">
+                <span class="form-field__label">Forged by</span>
+                <input id="forge-creator-name" type="text" maxlength="32" class="input" placeholder="Display-only maker name" />
+              </label>
+              <label class="form-field">
+                <span class="form-field__label">Creative assist</span>
+                <select id="forge-model" class="select">
+                  <option value="ollama">Ollama local flavor assist</option>
+                  <option value="procedural">Procedural only</option>
+                </select>
+              </label>
+              <label class="form-field">
+                <span class="form-field__label">Forge profile</span>
+                <select id="forge-balance" class="select">
+                  <option value="50/50">50/50 duel tuning</option>
+                  <option value="aggressive">Aggressive skew</option>
+                  <option value="tank">Tank skew</option>
+                </select>
+              </label>
+            </div>
+
+            <label class="form-field">
+              <span class="form-field__label">Prompt</span>
+              <textarea id="forge-prompt" rows="5" maxlength="600" class="textarea" placeholder="Example: A control specialist who traps reckless rushdown with shifting hologram zones, but crumbles if caught in a straight brawl."></textarea>
+            </label>
+
+            <div class="action-row">
+              <button type="button" id="forge-btn" class="button button--accent">Generate Forge Preview</button>
+              <div class="support-note">
+                Save draft uses unlisted. Publish uses public.
+              </div>
+            </div>
+          </section>
+        </form>
+      </div>
+
+      <div class="split-layout split-layout--sidebar-right forge-support">
+        <section class="panel">
+          <header class="section-header">
+            <div>
+              <p class="section-header__eyebrow">Step 3</p>
+              <h2 class="section-header__title">Review preview</h2>
+            </div>
+          </header>
+          <div id="forge-validation" class="forge-validation"></div>
+          <div id="forged-preview" class="forge-preview">No fighter forged yet. Choose an style and wake the browser goblin.</div>
+        </section>
+
+        <aside class="panel panel--soft">
+          <header class="section-header">
+            <div>
+              <p class="section-header__eyebrow">Step 4</p>
+              <h2 class="section-header__title">Save and share</h2>
+              <p class="section-header__copy">Commit safely, then send the build into Arena or your local roster.</p>
+            </div>
+          </header>
+
+          <div class="forge-save-actions">
+            <button type="button" id="save-draft-btn" class="button button--warning">Save Draft</button>
+            <button type="button" id="save-public-btn" class="button button--secondary">Publish Fighter</button>
+            <button type="button" id="save-variant-btn" class="button button--ghost">Save Variant</button>
+          </div>
+
+          <div id="forge-save-state" class="forge-save-state"></div>
+          <p id="llm-status" class="muted-note"></p>
+        </aside>
+      </div>
+    </section>
+  </section>
+{% endblock %}
+
+{% block extra_scripts %}
+  <script nonce="{{ request.csp_nonce }}" type="module" src="{% static 'arena/js/app.js' %}"></script>
+{% endblock %}

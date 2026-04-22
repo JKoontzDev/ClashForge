@@ -1,0 +1,11 @@
+User-agent: *
+Allow: /
+
+Disallow: /admin/
+Disallow: /api/
+Disallow: /reports/
+Disallow: /__debug__/
+Disallow: /private/
+Disallow: /drafts/
+
+Sitemap: https://clashforge.jkoontz.dev/sitemap.xml

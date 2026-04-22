@@ -1,0 +1,40 @@
+.reports-list {
+  display: grid;
+  gap: 0.85rem;
+}
+
+.report-card {
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  background: rgba(2, 6, 23, 0.58);
+  padding: 0.95rem;
+}
+
+.report-card__top {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.8rem;
+  align-items: flex-start;
+}
+
+.report-card__title,
+.report-card__meta,
+.report-card__summary {
+  margin: 0;
+}
+
+.report-card__title {
+  color: #fff;
+  font-weight: 700;
+}
+
+.report-card__meta {
+  margin-top: 0.2rem;
+  color: var(--text-faint);
+  font-size: 0.8rem;
+}
+
+.report-card__summary {
+  margin-top: 0.55rem;
+  color: var(--text-soft);
+}

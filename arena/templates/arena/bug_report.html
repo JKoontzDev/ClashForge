@@ -1,0 +1,69 @@
+{% extends 'arena/base.html' %}
+
+{% block title %}Bug Report | ClashForge{% endblock %}
+{% block shell_title %}Bug Report{% endblock %}
+{% block shell_copy %}Send a concise report when something in ClashForge is broken or confusing.{% endblock %}
+
+{% block content %}
+  <section class="panel support-form">
+    <form method="post" novalidate>
+      {% csrf_token %}
+      {{ form.website }}
+
+      {% if form.non_field_errors %}
+        <div class="support-note form-errors">
+          {{ form.non_field_errors }}
+        </div>
+      {% endif %}
+
+      <div class="support-form__grid">
+        <div class="form-field">
+          <label class="form-field__label" for="{{ form.name.id_for_label }}">Name</label>
+          {{ form.name }}
+          {{ form.name.errors }}
+        </div>
+
+        <div class="form-field">
+          <label class="form-field__label" for="{{ form.email.id_for_label }}">Email</label>
+          {{ form.email }}
+          {{ form.email.errors }}
+        </div>
+
+        <div class="form-field">
+          <label class="form-field__label" for="{{ form.category.id_for_label }}">Category</label>
+          {{ form.category }}
+          {{ form.category.errors }}
+        </div>
+
+        <div class="form-field">
+          <label class="form-field__label" for="{{ form.severity.id_for_label }}">Severity</label>
+          {{ form.severity }}
+          {{ form.severity.errors }}
+        </div>
+      </div>
+
+      <div class="form-field">
+        <label class="form-field__label" for="{{ form.page_url.id_for_label }}">Page URL</label>
+        {{ form.page_url }}
+        {{ form.page_url.errors }}
+      </div>
+
+      <div class="form-field">
+        <label class="form-field__label" for="{{ form.summary.id_for_label }}">Short summary</label>
+        {{ form.summary }}
+        {{ form.summary.errors }}
+      </div>
+
+      <div class="form-field">
+        <label class="form-field__label" for="{{ form.details.id_for_label }}">What happened?</label>
+        {{ form.details }}
+        {{ form.details.errors }}
+      </div>
+
+      <div class="support-form__footer">
+        <button type="submit" class="button button--primary">Submit report</button>
+        <p class="muted-note">Version {{ app_version|default:"" }} / build {{ build_version|default:"" }}</p>
+      </div>
+    </form>
+  </section>
+{% endblock %}

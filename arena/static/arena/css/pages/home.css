@@ -1,0 +1,59 @@
+.home-grid {
+  display: grid;
+  gap: 1.15rem;
+}
+
+.home-loop-card,
+.home-fighter-card,
+.home-report-card {
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  background: rgba(2, 6, 23, 0.58);
+  padding: 0.95rem;
+}
+
+.home-loop-card__eyebrow,
+.home-fighter-card__creator,
+.home-report-card__meta {
+  margin: 0 0 0.35rem;
+  color: var(--blue);
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.home-loop-card__title,
+.home-fighter-card__name,
+.home-report-card__title {
+  margin: 0;
+  color: #fff;
+  font-size: 1.02rem;
+}
+
+.home-loop-card__copy,
+.home-fighter-card__description,
+.home-report-card__summary,
+.home-fighter-card__title {
+  margin: 0.45rem 0 0;
+  color: var(--text-muted);
+  font-size: 0.88rem;
+}
+
+.home-fighter-card__top {
+  display: flex;
+  gap: 0.8rem;
+  align-items: flex-start;
+}
+
+.home-fighter-card__avatar {
+  width: 3rem;
+  height: 3rem;
+  border-radius: 1rem;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  flex-shrink: 0;
+}
+
+.home-report-card__meta {
+  color: var(--text-faint);
+}

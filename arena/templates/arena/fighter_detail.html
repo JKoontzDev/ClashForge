@@ -1,0 +1,366 @@
+{% extends 'arena/base.html' %}
+{% load static %}
+
+{% block title %}{{ fighter.name }} | ClashForge{% endblock %}
+{% block shell_title %}Fighter Profile{% endblock %}
+{% block shell_copy %}View a fighter, share the link, challenge them in the arena, or open them in Forge to make the build your own.{% endblock %}
+
+{% block extra_styles %}
+  <link rel="stylesheet" href="{% static 'arena/css/pages/fighter_detail.css' %}" />
+{% endblock %}
+
+{% block header_actions %}
+  <a href="{% url 'fighters-page' %}" class="button-link button--ghost">Back to Fighters</a>
+  {% if fighter.visibility == 'public' %}
+    <a href="{{ challenge_url }}" class="button-link button--primary">Use in Arena</a>
+  {% else %}
+    <a href="{{ duplicate_url }}" class="button-link button--primary">Duplicate as Variant</a>
+  {% endif %}
+{% endblock %}
+
+{% block content %}
+  <section
+    id="fighter-detail-page"
+    class="fighter-detail"
+    data-module="fighter-detail-profile"
+    data-payload-id="fighter-detail-payload"
+  >
+    <section class="panel fighter-hero">
+      <div class="fighter-hero__top">
+        <div class="fighter-hero__identity">
+          <div
+            id="profile-avatar"
+            class="fighter-hero__avatar"
+            data-avatar-color="{{ fighter.avatar_color|default:'#6d28d9' }}"
+            aria-hidden="true"
+          ></div>
+
+          <div class="fighter-hero__body">
+            <div class="fighter-hero__eyebrow-row">
+              <p class="section-header__eyebrow">ClashForge Profile</p>
+              {% if fighter.visibility == 'unlisted' %}
+                <span class="meta-pill meta-pill--amber">Unlisted</span>
+              {% else %}
+                <span class="meta-pill meta-pill--blue">Public</span>
+              {% endif %}
+            </div>
+
+            <h2 class="fighter-hero__name">{{ fighter.name }}</h2>
+            <p class="fighter-hero__title">{{ fighter.title|default:"Untitled combatant" }}</p>
+
+            {% if fighter.creator_name %}
+              <p class="fighter-hero__creator">Forged by {{ fighter.creator_name }}</p>
+            {% endif %}
+
+            <div class="fighter-hero__tags">
+              <span class="meta-pill meta-pill--purple">{{ fighter.get_archetype_display }}</span>
+              {% for tag in fighter_identity.role_tags %}
+                <span class="tag">{{ tag.label }}</span>
+              {% endfor %}
+            </div>
+
+            <p class="fighter-hero__summary">{{ fighter_identity.summary }}</p>
+          </div>
+        </div>
+
+        <div class="fighter-hero__actions">
+          <span
+            id="profile-champion-badge"
+            class="button button--warning fighter-hero__champion-badge hidden"
+            hidden
+          >
+            Your Champion
+          </span>
+
+          <button
+            id="profile-set-champion-btn"
+            type="button"
+            class="button button--warning"
+          >
+            Set as Champion
+          </button>
+
+          <button
+            id="profile-roster-btn"
+            type="button"
+            class="button button--accent"
+          >
+            Add to Local Roster
+          </button>
+
+          {% if fighter.visibility == 'public' %}
+            <a href="{{ challenge_url }}" class="button-link button--primary">Use in Arena</a>
+          {% endif %}
+          <a href="{{ duplicate_url }}" class="button-link button--secondary">Duplicate as Variant</a>
+
+          <button
+            id="profile-copy-share-link-btn"
+            type="button"
+            class="button button--ghost"
+            data-copy-source="shareUrl"
+            data-default-label="Copy Share Link"
+            data-copied-label="Share Link Copied"
+          >
+            Copy Share Link
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <section class="split-layout split-layout--sidebar-right">
+      <div class="fighter-detail__main">
+        <section class="panel">
+          <header class="section-header">
+            <div>
+              <p class="section-header__eyebrow">Lore</p>
+              <h2 class="section-header__title">Forge identity</h2>
+            </div>
+          </header>
+          <p class="fighter-detail__prose">{{ fighter.description|default:"No lore written yet." }}</p>
+        </section>
+
+        <section class="panel">
+          <header class="section-header">
+            <div>
+              <p class="section-header__eyebrow">Fight Plan</p>
+              <h2 class="section-header__title">{{ fighter_identity.label }} read</h2>
+            </div>
+          </header>
+
+          <div class="fighter-plan-grid">
+            <article class="surface-card">
+              <p class="section-header__eyebrow">Win pattern</p>
+              <p class="fighter-detail__copy">{{ fighter_identity.win_pattern }}</p>
+            </article>
+
+            <article class="surface-card">
+              <p class="section-header__eyebrow">Stat identity</p>
+              <p class="fighter-detail__copy"><strong>{{ fighter_identity.stat_identity }}</strong></p>
+              <p class="fighter-detail__copy">{{ fighter_identity.stat_focus }}</p>
+            </article>
+
+            <article class="surface-card fighter-plan-grid__accent fighter-plan-grid__accent--pink">
+              <p class="section-header__eyebrow">Challenge prompt</p>
+              <p class="fighter-detail__copy">{{ challenge_prompt }}</p>
+            </article>
+
+            <article class="surface-card fighter-plan-grid__accent fighter-plan-grid__accent--good">
+              <p class="section-header__eyebrow">Strengths</p>
+              <ul class="fighter-detail__list">
+                {% for strength in fighter_identity.strengths %}
+                  <li>{{ strength }}</li>
+                {% endfor %}
+              </ul>
+            </article>
+
+            <article class="surface-card fighter-plan-grid__accent fighter-plan-grid__accent--warn">
+              <p class="section-header__eyebrow">Weaknesses</p>
+              <ul class="fighter-detail__list">
+                {% for weakness in fighter_identity.weaknesses %}
+                  <li>{{ weakness }}</li>
+                {% endfor %}
+              </ul>
+            </article>
+          </div>
+        </section>
+
+        <section class="panel">
+          <header class="section-header">
+            <div>
+              <p class="section-header__eyebrow">Combat Kit</p>
+              <h2 class="section-header__title">Passive and abilities</h2>
+            </div>
+          </header>
+
+          <article class="surface-card">
+            <p class="section-header__eyebrow">Passive</p>
+            <p class="fighter-detail__ability-title">{{ fighter.passive_name|default:"No passive" }}</p>
+            <p class="fighter-detail__copy">{{ fighter.passive_description|default:"No passive description yet." }}</p>
+          </article>
+
+          <div class="fighter-ability-list">
+            {% for ability in fighter.abilities %}
+              <article class="surface-card">
+                <div class="fighter-detail__ability-head">
+                  <div>
+                    <p class="fighter-detail__ability-title">{{ ability.name }}</p>
+                    <p class="fighter-detail__copy">{{ ability.description }}</p>
+                  </div>
+                  <div class="fighter-detail__ability-meta">
+                    <span class="tag">{{ ability.type }}</span>
+                    <span class="tag">CD {{ ability.cooldown }}</span>
+                    {% if ability.scaling %}
+                      <span class="tag">{{ ability.scaling }} scaling</span>
+                    {% endif %}
+                    {% if ability.duration %}
+                      <span class="tag">{{ ability.duration }} turns</span>
+                    {% endif %}
+                  </div>
+                </div>
+              </article>
+            {% empty %}
+              <div class="empty-state">No abilities defined yet.</div>
+            {% endfor %}
+          </div>
+        </section>
+      </div>
+
+      <aside class="fighter-detail__sidebar">
+        <section id="profile-champion-card" class="panel panel--warm">
+          <header class="section-header">
+            <div>
+              <p class="section-header__eyebrow">Champion</p>
+              <h2 class="section-header__title">Local headliner</h2>
+            </div>
+          </header>
+
+          <div
+            id="profile-champion-body"
+            class="fighter-detail__champion-copy"
+            aria-live="polite"
+          >
+            Stored locally in this browser. Set this fighter as your champion to track simple rivalry and recap notes.
+          </div>
+        </section>
+
+        <section class="panel panel--soft">
+          <header class="section-header">
+            <div>
+              <p class="section-header__eyebrow">Share kit</p>
+              <h2 class="section-header__title">Import, share, or branch</h2>
+            </div>
+          </header>
+
+          <div class="compact-list">
+            <article class="surface-card">
+              <p class="section-header__eyebrow">Visibility</p>
+              <p class="fighter-detail__copy"><strong>{{ fighter.get_visibility_display }}</strong></p>
+              <p class="fighter-detail__copy">{{ visibility_summary }}</p>
+            </article>
+
+            <article class="surface-card">
+              <p class="section-header__eyebrow">Share URL</p>
+              <p class="fighter-detail__copy fighter-detail__break">{{ share_url }}</p>
+              <div class="action-row">
+                <button
+                  id="profile-copy-share-url-btn"
+                  type="button"
+                  class="button button--ghost"
+                  data-copy-source="shareUrl"
+                  data-default-label="Copy Share URL"
+                  data-copied-label="Share URL Copied"
+                >
+                  Copy Share URL
+                </button>
+              </div>
+            </article>
+
+            {% if fighter.visibility == 'public' %}
+              <article class="surface-card">
+                <p class="section-header__eyebrow">Challenge URL</p>
+                <p class="fighter-detail__copy fighter-detail__break">{{ challenge_url }}</p>
+                <div class="action-row">
+                  <a href="{{ challenge_url }}" class="button-link button--primary">Use in Arena</a>
+                  <button
+                    id="profile-copy-challenge-url-btn"
+                    type="button"
+                    class="button button--ghost"
+                    data-copy-source="challengeUrl"
+                    data-default-label="Copy Challenge URL"
+                    data-copied-label="Challenge URL Copied"
+                  >
+                    Copy Challenge URL
+                  </button>
+                </div>
+              </article>
+            {% else %}
+              <article class="surface-card">
+                <p class="section-header__eyebrow">Battle access</p>
+                <p class="fighter-detail__copy">
+                  Unlisted fighters can be viewed and duplicated by direct link, but official public battles require a published variant.
+                </p>
+              </article>
+            {% endif %}
+
+            <article class="surface-card">
+              <p class="section-header__eyebrow">Variant flow</p>
+              <p class="fighter-detail__copy">Duplicate into Forge to branch this build safely.</p>
+              <div class="action-row">
+                <a href="{{ duplicate_url }}" class="button-link button--secondary">Duplicate in Forge</a>
+                <a href="{{ forge_url }}" class="button-link button--ghost">Inspect in Forge</a>
+              </div>
+              <p id="profile-duplicate-note" class="muted-note">
+                Duplicating opens a copied workflow. It does not carry edit rights for the original fighter.
+              </p>
+            </article>
+
+            <div class="support-note">
+              <p id="profile-roster-note" aria-live="polite">
+                Add this fighter to your local roster to keep a browser-only snapshot for later Arena or Forge use.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <section class="panel panel--soft">
+          <header class="section-header">
+            <div>
+              <p class="section-header__eyebrow">Statline</p>
+              <h2 class="section-header__title">Core numbers</h2>
+            </div>
+          </header>
+
+          <div class="fighter-stats-grid">
+            <article class="surface-card"><span class="stat-pill__label">Strength</span><span class="fighter-stat__value">{{ fighter.strength }}</span></article>
+            <article class="surface-card"><span class="stat-pill__label">Speed</span><span class="fighter-stat__value">{{ fighter.speed }}</span></article>
+            <article class="surface-card"><span class="stat-pill__label">Durability</span><span class="fighter-stat__value">{{ fighter.durability }}</span></article>
+            <article class="surface-card"><span class="stat-pill__label">Intelligence</span><span class="fighter-stat__value">{{ fighter.intelligence }}</span></article>
+            <article class="surface-card fighter-stats-grid__wide"><span class="stat-pill__label">Max health</span><span class="fighter-stat__value">{{ fighter.max_health }}</span></article>
+          </div>
+        </section>
+
+        <section class="panel panel--soft">
+          <header class="section-header">
+            <div>
+              <p class="section-header__eyebrow">State</p>
+              <h2 class="section-header__title">Route and source</h2>
+            </div>
+          </header>
+
+          <div class="compact-list">
+            <article class="surface-card">
+              <p class="section-header__eyebrow">Slug</p>
+              <p class="fighter-detail__copy">{{ fighter.slug }}</p>
+            </article>
+
+            <article class="surface-card">
+              <p class="section-header__eyebrow">Source</p>
+              <p class="fighter-detail__copy">{{ fighter.get_source_display }}</p>
+            </article>
+
+            {% if fighter.fighter_state.tags %}
+              <article class="surface-card">
+                <p class="section-header__eyebrow">Forge tags</p>
+                <div class="action-row">
+                  {% for tag in fighter.fighter_state.tags %}
+                    <span class="tag">{{ tag }}</span>
+                  {% endfor %}
+                </div>
+              </article>
+            {% endif %}
+          </div>
+        </section>
+      </aside>
+    </section>
+
+    <p id="fighter-detail-status" class="sr-only" aria-live="polite"></p>
+  </section>
+{% endblock %}
+
+{% block extra_scripts %}
+  {{ detail_fighter_payload|json_script:"fighter-detail-payload" }}
+  <script
+    type="module"
+    src="{% static 'arena/js/fighter_detail.js' %}"
+  ></script>
+{% endblock %}

@@ -1,0 +1,113 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{% block title %}ClashForge{% endblock %}</title>
+  <link rel="stylesheet" href="{% static 'arena/css/base.css' %}" />
+  <link rel="stylesheet" href="{% static 'arena/css/components.css' %}" />
+  <link rel="stylesheet" href="{% static 'arena/css/app.css' %}" />
+  <meta name="description" content="Forge custom fighters, build unique abilities, and simulate stick-style battles in ClashForge.">
+  <meta name="robots" content="index,follow,max-snippet:-1,max-image-preview:large,max-video-preview:-1">
+  <link rel="canonical" href="https://clashforge.jkoontz.dev/">
+  <meta name="keywords" content="Josh Koontz, jkoontz.dev, christian developer, clashforge, stick fighter, web apps, software projects">
+  <meta name="author" content="Josh Koontz">
+  <link rel="icon" type="image/png" href="{% static 'img/clashforge.png' %}">
+  <link rel="apple-touch-icon" href="{% static 'img/clashforge.png' %}">
+
+
+
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="ClashForge">
+  <meta property="og:title" content="ClashForge – AI Fighter Creator and Battle Simulator">
+  <meta property="og:description" content="Forge custom fighters, build unique abilities, and simulate anime-style battles in ClashForge.">
+  <meta property="og:url" content="https://clashforge.jkoontz.dev/">
+  <meta property="og:image" content="{{ request.scheme }}://{{ request.get_host }}{% static 'img/clashforge.png' %}">
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="ClashForge – AI Fighter Creator and Battle Simulator">
+  <meta name="twitter:description" content="Forge custom fighters, build unique abilities, and simulate anime-style battles in ClashForge.">
+  <meta name="twitter:image" content="{{ request.scheme }}://{{ request.get_host }}{% static 'img/clashforge.png' %}">
+
+
+
+
+
+  {% block extra_styles %}{% endblock %}
+</head>
+<body
+  data-page="{{ page_key|default:'app' }}"
+  data-arena-url="{% url 'arena-index' %}"
+  data-forge-url="{% url 'forge-page' %}"
+  data-roster-url="{% url 'roster-page' %}"
+>
+  <div class="site-shell">
+    <div class="site-shell__backdrop" aria-hidden="true"></div>
+
+    <header class="site-header">
+      <div class="site-header__inner">
+        <a href="{% url 'home-page' %}" class="site-brand">
+          <img src="{% static 'img/clashforge.png' %}" class="site-brand__mark">
+          <span class="site-brand__text">
+            <strong>ClashForge</strong>
+            <span>Browser combat fighter</span>
+          </span>
+        </a>
+
+        <nav class="site-nav" aria-label="Primary">
+          <a href="{% url 'home-page' %}" class="site-nav__link{% if page_key == 'home' %} is-active{% endif %}">Home</a>
+          <a href="{% url 'arena-index' %}" class="site-nav__link{% if page_key == 'arena' %} is-active{% endif %}">Arena</a>
+          <a href="{% url 'forge-page' %}" class="site-nav__link{% if page_key == 'forge' %} is-active{% endif %}">Forge</a>
+          <a href="{% url 'roster-page' %}" class="site-nav__link{% if page_key == 'roster' %} is-active{% endif %}">Roster</a>
+          <a href="{% url 'fighters-page' %}" class="site-nav__link{% if page_key == 'fighters' or page_key == 'detail' %} is-active{% endif %}">Fighters</a>
+          <a href="{% url 'reports-page' %}" class="site-nav__link{% if page_key == 'reports' %} is-active{% endif %}">Reports</a>
+        </nav>
+      </div>
+    </header>
+
+    <main class="page-shell">
+      {% if messages %}
+        <div class="message-list" role="status" aria-live="polite">
+          {% for message in messages %}
+            <p class="message message--{{ message.tags|default:'info' }}">{{ message }}</p>
+          {% endfor %}
+        </div>
+      {% endif %}
+
+      {% block page_header %}
+        <section class="page-header">
+          <div class="page-header__body">
+            <p class="page-header__eyebrow">{% block shell_eyebrow %}ClashForge{% endblock %}</p>
+            <h1 class="page-header__title">{% block shell_title %}ClashForge{% endblock %}</h1>
+            <p class="page-header__copy">{% block shell_copy %}Server-rendered browser battles, local roster management, and a cleaner fighter workflow.{% endblock %}</p>
+          </div>
+          <div class="page-header__actions">
+            {% block header_actions %}{% endblock %}
+          </div>
+        </section>
+      {% endblock %}
+
+      {% block content %}{% endblock %}
+    </main>
+
+    <footer class="site-footer" aria-label="Site footer">
+      <div class="site-footer__inner">
+        <div class="site-footer__brand">
+          <a href="{% url 'home-page' %}" class="site-footer__title">ClashForge</a>
+          <p>Forge fighters, simulate battles, and keep the arena moving.</p>
+        </div>
+
+        <nav class="site-footer__links" aria-label="Footer">
+          <a href="{% url 'privacy-page' %}">Privacy Policy</a>
+          <a href="{% url 'terms-page' %}">Terms of Service</a>
+          <a href="{% url 'bug-report-page' %}">Bug Report</a>
+        </nav>
+
+        <p class="site-footer__copy">&copy; {% now "Y" %} ClashForge.</p>
+      </div>
+    </footer>
+  </div>
+  {% block extra_scripts %}{% endblock %}
+</body>
+</html>

@@ -1,0 +1,765 @@
+.roster-page {
+  --roster-panel-bg: linear-gradient(180deg, rgba(16, 25, 43, 0.9), rgba(7, 11, 22, 0.94));
+  --roster-panel-border: rgba(71, 85, 105, 0.5);
+  --roster-panel-shadow: 0 16px 40px rgba(2, 6, 23, 0.34);
+  --roster-text-muted: #94a3b8;
+  --roster-text-soft: #cbd5e1;
+  --roster-card-bg: rgba(2, 6, 23, 0.62);
+  --roster-card-border: rgba(51, 65, 85, 0.88);
+  --roster-chip-bg: rgba(15, 23, 42, 0.78);
+  display: grid;
+  gap: 1.25rem;
+}
+
+.roster-hero {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+  border: 1px solid rgba(71, 85, 105, 0.48);
+  border-radius: 1.5rem;
+  padding: 1rem 1.15rem;
+  background:
+    linear-gradient(135deg, rgba(56, 189, 248, 0.08), rgba(16, 25, 43, 0.92) 42%, rgba(139, 92, 246, 0.08)),
+    rgba(2, 6, 23, 0.72);
+  box-shadow: 0 16px 40px rgba(2, 6, 23, 0.28);
+}
+
+.roster-hero__body {
+  min-width: 0;
+}
+
+.roster-hero__eyebrow {
+  margin: 0 0 0.35rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: #38bdf8;
+}
+
+.roster-hero__title {
+  margin: 0;
+  font-size: clamp(1.6rem, 2.6vw, 2.2rem);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  color: #fff;
+}
+
+.roster-hero__copy {
+  margin: 0.45rem 0 0;
+  max-width: 46rem;
+  color: var(--roster-text-muted);
+  font-size: 0.92rem;
+  line-height: 1.5;
+}
+
+.roster-status-region:empty {
+  display: none;
+}
+
+.roster-status {
+  border: 1px solid var(--roster-panel-border);
+  border-radius: 1rem;
+  padding: 0.9rem 1rem;
+  background: rgba(16, 25, 43, 0.82);
+  box-shadow: var(--roster-panel-shadow);
+  font-size: 0.92rem;
+  font-weight: 600;
+}
+
+.roster-status--info {
+  border-color: rgba(56, 189, 248, 0.32);
+  background: rgba(8, 47, 73, 0.36);
+  color: #7dd3fc;
+}
+
+.roster-status--success {
+  border-color: rgba(52, 211, 153, 0.28);
+  background: rgba(6, 78, 59, 0.34);
+  color: #a7f3d0;
+}
+
+.roster-status--error {
+  border-color: rgba(251, 113, 133, 0.32);
+  background: rgba(127, 29, 29, 0.3);
+  color: #fecdd3;
+}
+
+.roster-layout {
+  display: grid;
+  gap: 1.25rem;
+}
+
+.roster-panel,
+.roster-main{
+    max-height: 70vh;
+    overflow: scroll;
+}
+
+.roster-main,
+.roster-sidebar {
+  min-width: 0;
+}
+
+.roster-sidebar {
+  display: grid;
+  gap: 1rem;
+  align-content: start;
+}
+
+.roster-panel {
+  border: 1px solid var(--roster-panel-border);
+  border-radius: 1.6rem;
+  background: var(--roster-panel-bg);
+  box-shadow: var(--roster-panel-shadow);
+  padding: 1.15rem;
+}
+
+.roster-panel--primary {
+  position: relative;
+  overflow: hidden;
+}
+
+.roster-panel--primary::before {
+  content: "";
+  position: absolute;
+  inset: 0 auto auto 0;
+  width: 100%;
+  height: 1px;
+  background: linear-gradient(90deg, rgba(56, 189, 248, 0.4), rgba(139, 92, 246, 0));
+}
+
+.roster-panel--champion {
+  background: linear-gradient(180deg, rgba(39, 28, 6, 0.72), rgba(16, 25, 43, 0.94));
+  border-color: rgba(251, 191, 36, 0.26);
+}
+
+.roster-section-head,
+.roster-sidebar-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.9rem;
+}
+
+.roster-section-head {
+  margin-bottom: 1rem;
+}
+
+.roster-section-head--library {
+  margin-bottom: 1.1rem;
+}
+
+.roster-section-kicker {
+  margin: 0 0 0.35rem;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: #38bdf8;
+}
+
+.roster-section-kicker--champion {
+  color: #facc15;
+}
+
+.roster-section-title,
+.roster-sidebar-title {
+  margin: 0;
+  color: #fff;
+}
+
+.roster-section-title {
+  font-size: clamp(1.35rem, 2vw, 1.75rem);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.roster-sidebar-title {
+  font-size: 1.15rem;
+  font-weight: 700;
+}
+
+.roster-section-copy,
+.roster-empty-copy,
+.roster-muted-note {
+  margin: 0;
+  line-height: 1.5;
+  color: var(--roster-text-muted);
+}
+
+.roster-section-copy {
+  max-width: 42rem;
+  font-size: 0.92rem;
+}
+
+.roster-empty-copy {
+  margin-bottom: 1rem;
+  font-size: 0.88rem;
+}
+
+.roster-muted-note {
+  border: 1px solid rgba(71, 85, 105, 0.34);
+  border-radius: 1rem;
+  padding: 0.8rem 0.95rem;
+  background: rgba(15, 23, 42, 0.44);
+  font-size: 0.8rem;
+}
+
+.roster-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  justify-content: flex-end;
+}
+
+.roster-action,
+.roster-card__action,
+.fighter-card__action,
+.roster-champion-button,
+.roster-clear-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  min-height: 2.4rem;
+  border-radius: 0.9rem;
+  border: 1px solid rgba(71, 85, 105, 0.6);
+  padding: 0.6rem 0.9rem;
+  background: rgba(15, 23, 42, 0.78);
+  color: #e2e8f0;
+  text-decoration: none;
+  font-size: 0.82rem;
+  font-weight: 700;
+  line-height: 1.2;
+  transition: border-color 140ms ease, background-color 140ms ease, transform 140ms ease;
+  cursor: pointer;
+}
+
+.roster-action:hover,
+.roster-card__action:hover,
+.fighter-card__action:hover,
+.roster-champion-button:hover,
+.roster-clear-button:hover {
+  transform: translateY(-1px);
+}
+
+.roster-action--arena,
+.roster-card__action--arena,
+.fighter-card__action--accent {
+  border-color: rgba(255, 77, 109, 0.28);
+  background: rgba(136, 19, 55, 0.22);
+  color: #fda4af;
+}
+
+.roster-action--forge,
+.roster-card__action--forge {
+  border-color: rgba(139, 92, 246, 0.28);
+  background: rgba(76, 29, 149, 0.22);
+  color: #d8b4fe;
+}
+
+.roster-card__action--secondary,
+.fighter-card__action--secondary {
+  color: var(--roster-text-soft);
+}
+
+.roster-card__action--remove,
+.roster-clear-button {
+  border-color: rgba(251, 191, 36, 0.28);
+  background: rgba(120, 53, 15, 0.2);
+  color: #fde68a;
+}
+
+.roster-champion-button {
+  border-color: rgba(251, 191, 36, 0.28);
+  background: rgba(120, 53, 15, 0.12);
+  color: #fde68a;
+}
+
+.roster-champion-button.is-active {
+  background: rgba(120, 53, 15, 0.26);
+}
+
+.fighter-card__action--primary {
+  border-color: rgba(56, 189, 248, 0.28);
+  background: rgba(8, 47, 73, 0.3);
+  color: #7dd3fc;
+}
+
+.roster-summary {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(132px, 1fr));
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.roster-summary-pill {
+  border: 1px solid rgba(71, 85, 105, 0.5);
+  border-radius: 1rem;
+  padding: 0.85rem 0.95rem;
+  background: var(--roster-chip-bg);
+}
+
+.roster-summary-pill--imports {
+  border-color: rgba(56, 189, 248, 0.22);
+}
+
+.roster-summary-pill--forge {
+  border-color: rgba(139, 92, 246, 0.22);
+}
+
+.roster-summary-pill--variants {
+  border-color: rgba(244, 114, 182, 0.22);
+}
+
+.roster-summary-label {
+  display: block;
+  margin-bottom: 0.35rem;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--roster-text-muted);
+}
+
+.roster-summary-value {
+  font-size: 1.55rem;
+  line-height: 1;
+  color: #fff;
+}
+
+.roster-grid {
+  display: grid;
+  gap: 0.9rem;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+}
+
+.roster-card,
+.fighter-card,
+.battle-item,
+.roster-champion-block,
+.roster-champion-empty,
+.roster-empty-state {
+  border: 1px solid var(--roster-card-border);
+  border-radius: 1.15rem;
+  background: var(--roster-card-bg);
+}
+
+.roster-card,
+.fighter-card {
+  padding: 0.95rem;
+}
+
+.roster-card {
+  display: grid;
+  gap: 0.95rem;
+}
+
+.roster-card__top {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 0.85rem;
+  align-items: flex-start;
+}
+
+.roster-card__avatar,
+.fighter-card__avatar {
+  border-radius: 1rem;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  flex-shrink: 0;
+}
+
+.roster-card__avatar {
+  width: 3rem;
+  height: 3rem;
+  box-shadow: 0 0 18px rgba(56, 189, 248, 0.14);
+}
+
+.fighter-card__avatar {
+  width: 2.9rem;
+  height: 2.9rem;
+  box-shadow: 0 0 16px rgba(56, 189, 248, 0.12);
+}
+
+.roster-card__head,
+.fighter-card__heading {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.7rem;
+  align-items: flex-start;
+}
+
+.roster-card__name,
+.fighter-card__name {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 700;
+  color: #fff;
+}
+
+.roster-card__title,
+.fighter-card__title {
+  margin: 0.18rem 0 0;
+  font-size: 0.78rem;
+  color: var(--roster-text-muted);
+}
+
+.roster-card__creator,
+.fighter-card__creator {
+  margin: 0.35rem 0 0;
+  font-size: 0.72rem;
+  color: #7dd3fc;
+}
+
+.roster-card__badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  justify-content: flex-end;
+}
+
+.roster-badge,
+.fighter-card__archetype,
+.public-fighters-count {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 999px;
+  border: 1px solid rgba(71, 85, 105, 0.5);
+  padding: 0.3rem 0.65rem;
+  font-size: 0.64rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.roster-badge {
+  color: var(--roster-text-soft);
+  background: rgba(15, 23, 42, 0.78);
+}
+
+.roster-badge--champion {
+  border-color: rgba(251, 191, 36, 0.28);
+  color: #fde68a;
+  background: rgba(120, 53, 15, 0.2);
+}
+
+.roster-badge--origin {
+  border-color: rgba(56, 189, 248, 0.26);
+  color: #7dd3fc;
+}
+
+.fighter-card__archetype {
+  border-color: rgba(139, 92, 246, 0.26);
+  background: rgba(76, 29, 149, 0.16);
+  color: #d8b4fe;
+}
+
+.public-fighters-count {
+  color: var(--roster-text-soft);
+  background: rgba(15, 23, 42, 0.72);
+}
+
+.roster-card__description,
+.fighter-card__description {
+  margin: 0;
+  color: var(--roster-text-soft);
+  line-height: 1.5;
+  font-size: 0.88rem;
+}
+
+.roster-card__description {
+  margin-top: 0.15rem;
+}
+
+.roster-card__stats {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.5rem;
+}
+
+.roster-card__stat {
+  border: 1px solid rgba(51, 65, 85, 0.76);
+  border-radius: 0.9rem;
+  padding: 0.6rem 0.75rem;
+  background: rgba(15, 23, 42, 0.72);
+}
+
+.roster-card__stat-label {
+  display: block;
+  margin-bottom: 0.2rem;
+  font-size: 0.64rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--roster-text-muted);
+}
+
+.roster-card__stat-value {
+  font-size: 0.92rem;
+  font-weight: 700;
+  color: #fff;
+}
+
+.roster-card__note {
+  margin: 0;
+  font-size: 0.76rem;
+  color: #64748b;
+}
+
+.roster-card__actions,
+.fighter-card__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+}
+
+.roster-empty-state,
+.fighter-library-empty {
+  padding: 1rem;
+  color: var(--roster-text-muted);
+  line-height: 1.5;
+}
+
+.roster-champion-body {
+  margin-top: 0.85rem;
+}
+
+.roster-champion-empty,
+.roster-champion-block {
+  padding: 1rem;
+}
+
+.roster-champion-empty {
+  display: grid;
+  gap: 0.45rem;
+}
+
+.roster-champion-empty__title {
+  margin: 0;
+  font-weight: 700;
+  color: #fff;
+}
+
+.roster-champion-empty__copy {
+  margin: 0;
+  color: var(--roster-text-muted);
+  line-height: 1.5;
+  font-size: 0.88rem;
+}
+
+.roster-champion-block {
+  display: grid;
+  gap: 0.8rem;
+}
+
+.roster-champion-block__hero {
+  border: 1px solid rgba(251, 191, 36, 0.18);
+  border-radius: 1rem;
+  padding: 0.9rem;
+  background: rgba(120, 53, 15, 0.14);
+}
+
+.roster-champion-block__label,
+.roster-champion-metric__label,
+.battle-item__meta,
+.battle-item__sims {
+  margin: 0;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--roster-text-muted);
+}
+
+.roster-champion-block__name {
+  margin: 0.35rem 0 0;
+  font-size: 1.3rem;
+  font-weight: 800;
+  color: #fff;
+}
+
+.roster-champion-block__title {
+  margin: 0.2rem 0 0;
+  color: var(--roster-text-soft);
+  font-size: 0.85rem;
+}
+
+.roster-champion-metrics {
+  display: grid;
+  gap: 0.65rem;
+}
+
+.roster-champion-metric {
+  border: 1px solid rgba(71, 85, 105, 0.5);
+  border-radius: 1rem;
+  padding: 0.8rem 0.9rem;
+  background: rgba(2, 6, 23, 0.48);
+}
+
+.roster-champion-metric__value {
+  margin: 0.35rem 0 0;
+  color: #fff;
+  font-size: 0.96rem;
+  font-weight: 700;
+  line-height: 1.45;
+}
+
+.roster-battle-list {
+  display: grid;
+  gap: 0.75rem;
+  margin-top: 0.85rem;
+}
+
+.battle-item {
+  padding: 0.8rem 0.9rem;
+}
+
+.battle-item__top {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.6rem;
+  align-items: flex-start;
+}
+
+.battle-item__title {
+  margin: 0;
+  color: #fff;
+  font-size: 0.9rem;
+  font-weight: 700;
+  line-height: 1.35;
+}
+
+.battle-item__meta,
+.battle-item__sims {
+  letter-spacing: 0.12em;
+}
+
+.battle-item__meta {
+  text-align: right;
+}
+
+.battle-item__sims {
+  margin-top: 0.45rem;
+}
+
+.battle-item__summary {
+  margin: 0.45rem 0 0;
+  color: var(--roster-text-soft);
+  line-height: 1.5;
+  font-size: 0.82rem;
+}
+
+.battle-item--empty {
+  color: var(--roster-text-muted);
+  font-size: 0.86rem;
+}
+
+.public-fighters {
+  display: grid;
+  gap: 0.2rem;
+}
+
+.fighter-library {
+  display: grid;
+  gap: 0.8rem;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+}
+
+.fighter-card {
+  display: grid;
+  gap: 0.9rem;
+}
+
+.fighter-card__identity {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 0.8rem;
+  align-items: flex-start;
+}
+
+.fighter-card__body {
+  min-width: 0;
+}
+
+.fighter-card__description {
+  margin-top: 0.5rem;
+}
+
+.fighter-card__actions {
+  justify-content: flex-start;
+}
+
+.fighter-card__action[disabled] {
+  opacity: 0.65;
+  cursor: wait;
+  transform: none;
+}
+
+@media (min-width: 980px) {
+  .roster-layout {
+    grid-template-columns: minmax(0, 1.45fr) minmax(280px, 0.75fr);
+    align-items: start;
+  }
+
+  .roster-champion-metrics {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .roster-champion-metric:last-child {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 979px) {
+  .roster-hero,
+  .roster-section-head,
+  .roster-sidebar-head,
+  .roster-card__head,
+  .fighter-card__heading,
+  .battle-item__top {
+    flex-direction: column;
+  }
+
+  .roster-actions {
+    justify-content: flex-start;
+  }
+
+  .roster-card__badges {
+    justify-content: flex-start;
+  }
+}
+
+@media (max-width: 640px) {
+  .roster-page {
+    gap: 1rem;
+  }
+
+  .roster-panel {
+    padding: 1rem;
+    border-radius: 1.3rem;
+  }
+
+  .roster-summary {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .roster-grid,
+  .fighter-library {
+    grid-template-columns: 1fr;
+  }
+
+  .roster-card__stats {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .roster-action,
+  .roster-card__action,
+  .fighter-card__action,
+  .roster-champion-button,
+  .roster-clear-button {
+    width: 100%;
+  }
+}

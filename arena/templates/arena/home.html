@@ -1,0 +1,99 @@
+{% extends 'arena/base.html' %}
+{% load static %}
+
+{% block title %}ClashForge{% endblock %}
+{% block shell_eyebrow %}BROWSER BATTLE GAME{% endblock %}
+{% block shell_title %}Forge fighters. Build your roster. Battle for glory.{% endblock %}
+{% block shell_copy %}Create unique fighters, test them in the arena, and grow a roster of champions ready for the next fight.{% endblock %}
+
+{% block extra_styles %}
+  <link rel="stylesheet" href="{% static 'arena/css/pages/home.css' %}" />
+{% endblock %}
+
+{% block header_actions %}
+  <a href="{% url 'arena-index' %}" class="button-link button--primary">Open Arena</a>
+  <a href="{% url 'forge-page' %}" class="button-link button--accent">Open Forge</a>
+{% endblock %}
+
+{% block content %}
+  <section class="home-grid">
+    <section class="panel panel--highlight">
+      <header class="section-header">
+        <div>
+          <p class="section-header__eyebrow">Main Areas</p>
+          <h2 class="section-header__title">Enter the Arena, Forge, or Roster</h2>
+        </div>
+      </header>
+
+      <div class="card-grid">
+        <article class="home-loop-card">
+          <p class="home-loop-card__eyebrow">Arena</p>
+          <h3 class="home-loop-card__title">Battle your fighters</h3>
+          <p class="home-loop-card__copy">Choose two fighters, run a match, and see who comes out on top.</p>
+          <div class="action-row">
+            <a href="{% url 'arena-index' %}" class="button-link button--primary">Open Arena</a>
+            <a href="{% url 'reports-page' %}" class="button-link button--ghost">View Reports</a>
+          </div>
+        </article>
+
+        <article class="home-loop-card">
+          <p class="home-loop-card__eyebrow">Forge</p>
+          <h3 class="home-loop-card__title">Create your next fighter</h3>
+          <p class="home-loop-card__copy">Build a fighter, shape their style, and save them for future battles.</p>
+          <div class="action-row">
+            <a href="{% url 'forge-page' %}" class="button-link button--accent">Open Forge</a>
+            <a href="{% url 'fighters-page' %}" class="button-link button--ghost">Browse Fighters</a>
+          </div>
+        </article>
+
+        <article class="home-loop-card">
+          <p class="home-loop-card__eyebrow">Roster</p>
+          <h3 class="home-loop-card__title">Manage your team</h3>
+          <p class="home-loop-card__copy">Keep track of your saved fighters, pick favorites, and prepare for the next battle.</p>
+          <div class="action-row">
+            <a href="{% url 'roster-page' %}" class="button-link button--secondary">Open Roster</a>
+            <a href="{% url 'fighters-page' %}" class="button-link button--ghost">Public Fighters</a>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="split-layout split-layout--sidebar-right">
+      <section class="panel">
+        <header class="section-header">
+          <div>
+            <p class="section-header__eyebrow">Featured Fighters</p>
+            <h2 class="section-header__title">Fighters worth checking out</h2>
+            <p class="section-header__copy">Browse public fighters, get inspired, or find your next rival.</p>
+          </div>
+          <a href="{% url 'fighters-page' %}" class="button-link button--ghost">Open Fighters</a>
+        </header>
+
+        <div class="card-grid">
+          {% for fighter in featured_fighters %}
+            <article class="home-fighter-card">
+              <div class="home-fighter-card__top">
+                <div class="home-fighter-card__avatar" style="background: {{ fighter.avatar_color }};"></div>
+                <div>
+                  <p class="home-fighter-card__name">{{ fighter.name }}</p>
+                  <p class="home-fighter-card__title">{{ fighter.title|default:"Untitled combatant" }}</p>
+                  {% if fighter.creator_name %}
+                    <p class="home-fighter-card__creator">Forged by {{ fighter.creator_name }}</p>
+                  {% endif %}
+                </div>
+              </div>
+              <p class="home-fighter-card__description">{{ fighter.description|default:"No lore written yet."|truncatechars:120 }}</p>
+              <div class="action-row">
+                <a href="{% url 'fighter-detail' fighter.slug %}" class="button-link button--secondary">View Profile</a>
+                <a href="{% url 'arena-index' %}?challenge={{ fighter.slug }}" class="button-link button--ghost">Challenge</a>
+              </div>
+            </article>
+          {% empty %}
+            <div class="empty-state">No public fighters are available yet.</div>
+          {% endfor %}
+        </div>
+      </section>
+
+    </section>
+  </section>
+{% endblock %}

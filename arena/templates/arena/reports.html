@@ -1,0 +1,44 @@
+{% extends 'arena/base.html' %}
+{% load static %}
+
+{% block title %}Reports | ClashForge{% endblock %}
+{% block shell_title %}Recent battle reports{% endblock %}
+{% block shell_copy %}Review recent fights, see who won, and look back at how each battle played out.{% endblock %}
+
+{% block extra_styles %}
+  <link rel="stylesheet" href="{% static 'arena/css/pages/reports.css' %}" />
+{% endblock %}
+
+{% block header_actions %}
+  <a href="{% url 'arena-index' %}" class="button-link button--primary">Open Arena</a>
+  <a href="{% url 'fighters-page' %}" class="button-link button--ghost">Browse Fighters</a>
+{% endblock %}
+
+{% block content %}
+  <section class="panel">
+    <header class="section-header">
+      <div>
+        <p class="section-header__eyebrow">Battle History</p>
+        <h2 class="section-header__title">Recent battle results</h2>
+        <p class="section-header__copy">Catch up on recent matches, winners, and fight summaries all in one place.</p>
+      </div>
+    </header>
+
+    <div class="reports-list">
+      {% for battle in recent_battles %}
+        <article class="report-card">
+          <div class="report-card__top">
+            <div>
+              <p class="report-card__title">{{ battle.fighter_a.name|default:"Unknown A" }} vs {{ battle.fighter_b.name|default:"Unknown B" }}</p>
+              <p class="report-card__meta">{{ battle.created_at|date:"M j, g:i A" }} · {{ battle.rounds }} round{{ battle.rounds|pluralize }}</p>
+            </div>
+            <span class="meta-pill meta-pill--blue">{{ battle.sim_count }} sim{{ battle.sim_count|pluralize }}</span>
+          </div>
+          <p class="report-card__summary">{{ battle.summary|default:"Official battle completed." }}</p>
+        </article>
+      {% empty %}
+        <div class="empty-state">No official battle history yet.</div>
+      {% endfor %}
+    </div>
+  </section>
+{% endblock %}

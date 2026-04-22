@@ -1,0 +1,114 @@
+.forge-banner-region {
+  margin-bottom: 1rem;
+}
+
+.forge-layout {
+  align-items: start;
+}
+
+.forge-library,
+.forge-main {
+  min-width: 0;
+}
+
+.forge-library__list {
+  display: grid;
+  gap: 0.8rem;
+  margin-top: 1rem;
+  max-height: min(72vh, 64rem);
+  overflow-y: auto;
+  padding-right: 0.2rem;
+}
+
+.forge-main {
+  display: grid;
+  gap: 1rem;
+}
+
+.forge-form {
+  display: grid;
+  gap: 0.95rem;
+}
+
+.forge-step {
+  display: grid;
+  gap: 0.9rem;
+}
+
+.forge-archetype-grid {
+  display: grid;
+  gap: 0.65rem;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+}
+
+.forge-archetype-option {
+  border: 1px solid var(--line);
+  border-radius: 1rem;
+  padding: 0.85rem;
+  background: rgba(2, 6, 23, 0.6);
+  color: var(--text-soft);
+  font-weight: 700;
+  text-align: left;
+  cursor: pointer;
+}
+
+.forge-archetype-option.is-active {
+  border-color: rgba(139, 92, 246, 0.38);
+  background: rgba(76, 29, 149, 0.18);
+  color: #fff;
+}
+
+.forge-archetype-brief {
+  display: grid;
+  gap: 0.9rem;
+}
+
+.forge-archetype-columns {
+  display: grid;
+  gap: 0.8rem;
+}
+
+.forge-archetype-note--good {
+  border-color: rgba(52, 211, 153, 0.24);
+}
+
+.forge-archetype-note--warn {
+  border-color: rgba(251, 191, 36, 0.24);
+}
+
+.forge-note-list {
+  margin: 0;
+  padding-left: 1rem;
+  color: var(--text-soft);
+}
+
+.forge-form-grid {
+  display: grid;
+  gap: 0.8rem;
+}
+
+.forge-support {
+  align-items: start;
+}
+
+.forge-validation,
+.forge-preview,
+.forge-save-state {
+  min-height: 2rem;
+}
+
+.forge-save-actions {
+  display: grid;
+  gap: 0.65rem;
+}
+
+@media (min-width: 900px) {
+  .forge-archetype-columns,
+  .forge-form-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .forge-form-grid .form-field:first-child {
+    grid-column: 1 / -1;
+  }
+}
