@@ -15,9 +15,12 @@
 {% endblock %}
 
 {% block content %}
+    <meta name="csrf-token" content="{{ csrf_token }}">
+
   <section id="champion-banner" class="arena-banner-region"></section>
   <section id="challenge-banner" class="arena-banner-region"></section>
   <section id="forge-status" class="arena-banner-region"></section>
+
 
   <section class="split-layout split-layout--sidebar arena-layout">
     <aside class="panel arena-sidebar">
