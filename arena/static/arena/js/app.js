@@ -102,6 +102,8 @@ els.archetypeButtons = Array.from(document.querySelectorAll('[data-archetype]'))
 
 const rand = (min, max) => Math.random() * (max - min) + min;
 const sample = (arr) => arr[Math.floor(Math.random() * arr.length)];
+const csrfToken = document.querySelector('meta[name="csrf-token"]').content;
+
 
 function refreshLocalRoster() {
   state.localRoster = loadRosterEntries();
@@ -2402,7 +2404,7 @@ async function runBattle() {
   };
   return apiJson('/api/battles/run/', {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers: { 'Content-Type': 'application/json', 'X-CSRFToken': csrfToken },
     body: JSON.stringify(payload),
   });
 }
