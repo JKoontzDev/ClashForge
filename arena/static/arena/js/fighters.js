@@ -7,6 +7,7 @@ const els = {
   status: document.getElementById('fighters-page-status'),
   buttons: Array.from(document.querySelectorAll('.fighters-roster-add')),
 };
+const csrfToken = document.querySelector('meta[name="csrf-token"]')?.content || '';
 
 function escapeHtml(value) {
   return String(value ?? '')
@@ -47,12 +48,21 @@ function syncButtons() {
   });
 }
 
-async function apiJson(url) {
-  const response = await fetch(url, {
-    headers: {
-      Accept: 'application/json',
-    },
-  });
+async function apiJson(url, options = {}) {
+  const requestOptions = {
+    credentials: 'same-origin',
+    ...options,
+  };
+  const headers = new Headers(requestOptions.headers || {});
+  if (!headers.has('Accept')) {
+    headers.set('Accept', 'application/json');
+  }
+  if (csrfToken && !headers.has('X-CSRFToken')) {
+    headers.set('X-CSRFToken', csrfToken);
+  }
+  requestOptions.headers = headers;
+
+  const response = await fetch(url, requestOptions);
   const payload = await response.json();
   if (!response.ok) {
     throw new Error(payload?.detail || 'Request failed.');
