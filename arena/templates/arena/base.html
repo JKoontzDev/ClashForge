@@ -42,6 +42,8 @@
   data-forge-url="{% url 'forge-page' %}"
   data-roster-url="{% url 'roster-page' %}"
 >
+    <meta name="csrf-token" content="{{ csrf_token }}">
+
   <div class="site-shell">
     <div class="site-shell__backdrop" aria-hidden="true"></div>
 
