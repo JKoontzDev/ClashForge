@@ -15,6 +15,7 @@ import {
 
 const arenaPath = document.body.dataset.arenaUrl || '/';
 const forgePath = document.body.dataset.forgeUrl || '/forge/';
+const csrfToken = document.querySelector('meta[name="csrf-token"]')?.content || '';
 
 const els = {
   status: document.getElementById('roster-page-status'),
@@ -337,10 +338,16 @@ function syncFeaturedButtons() {
 }
 
 async function apiJson(url, options = {}) {
-  const requestOptions = { ...options };
+  const requestOptions = {
+    credentials: 'same-origin',
+    ...options,
+  };
   const headers = new Headers(requestOptions.headers || {});
   if (!headers.has('Accept')) {
     headers.set('Accept', 'application/json');
+  }
+  if (csrfToken && !headers.has('X-CSRFToken')) {
+    headers.set('X-CSRFToken', csrfToken);
   }
   requestOptions.headers = headers;
 

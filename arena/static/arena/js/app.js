@@ -102,7 +102,7 @@ els.archetypeButtons = Array.from(document.querySelectorAll('[data-archetype]'))
 
 const rand = (min, max) => Math.random() * (max - min) + min;
 const sample = (arr) => arr[Math.floor(Math.random() * arr.length)];
-const csrfToken = document.querySelector('meta[name="csrf-token"]').content;
+const csrfToken = document.querySelector('meta[name="csrf-token"]')?.content || '';
 
 
 function refreshLocalRoster() {
@@ -1194,11 +1194,17 @@ function flattenApiErrors(payload, prefix = '') {
 }
 
 async function apiJson(url, options = {}) {
-  const requestOptions = { ...options };
+  const requestOptions = {
+    credentials: 'same-origin',
+    ...options,
+  };
   const method = String(requestOptions.method || 'GET').toUpperCase();
   const headers = new Headers(requestOptions.headers || {});
   if (!headers.has('Accept')) {
     headers.set('Accept', 'application/json');
+  }
+  if (csrfToken && !headers.has('X-CSRFToken')) {
+    headers.set('X-CSRFToken', csrfToken);
   }
   if (['POST', 'PATCH', 'PUT', 'DELETE'].includes(method)) {
     headers.set('X-ClashForge-Client', 'web');
@@ -2404,7 +2410,7 @@ async function runBattle() {
   };
   return apiJson('/api/battles/run/', {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json', 'X-CSRFToken': csrfToken },
+    headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(payload),
   });
 }
